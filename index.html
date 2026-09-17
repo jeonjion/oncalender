@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101010">
+<title>OnCallinder</title>
+<style>
+:root{--bg:#f5f5f7;--panel:#fff;--text:#1d1d1f;--muted:#86868b;--line:#e5e5e7;--accent:#0071e3;--event:#e8f1ff}
+[data-theme=dark]{--bg:#101010;--panel:#1c1c1e;--text:#f5f5f7;--muted:#98989f;--line:#38383a;--accent:#0a84ff;--event:#203552}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Noto Sans KR",sans-serif}
+button,input{font:inherit}.hidden{display:none!important}
+.login{min-height:100vh;display:grid;place-items:center;padding:24px}.login-card{width:min(430px,100%);background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:42px 30px;text-align:center;box-shadow:0 20px 60px #00000012}.logo{font-size:44px;margin-bottom:10px}.login h1{margin:0 0 10px;font-size:28px}.login p{color:var(--muted);line-height:1.6}.apple{width:100%;border:0;border-radius:14px;padding:14px 18px;background:#000;color:#fff;cursor:pointer;font-weight:650;margin-top:18px}.demo{font-size:12px;color:var(--muted);margin-top:12px}
+.app{min-height:100vh;padding:24px}.top{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-size:20px;font-weight:700}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:9px 13px;cursor:pointer}.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.calendar{max-width:1200px;margin:22px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:24px;overflow:hidden}.head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--line)}.head h2{margin:0;font-size:25px}.nav{display:flex;gap:6px}.nav button{width:38px;height:38px}.week,.grid{display:grid;grid-template-columns:repeat(7,1fr)}.week div{padding:12px;text-align:center;color:var(--muted);font-size:13px;border-bottom:1px solid var(--line)}.cell{min-height:120px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:9px;cursor:pointer}.cell:nth-child(7n){border-right:0}.date{width:28px;height:28px;display:grid;place-items:center;border-radius:50%;font-size:13px}.today{background:var(--accent);color:#fff}.other{color:var(--muted);opacity:.5}.event{margin-top:7px;background:var(--event);border-radius:7px;padding:5px 7px;font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;cursor:pointer}.event small{display:block;color:var(--muted);margin-bottom:2px}
+.modal-back{position:fixed;inset:0;background:#0008;display:grid;place-items:center;padding:20px}.modal{width:min(420px,100%);background:var(--panel);border-radius:22px;padding:24px}.modal h3{margin-top:0}.field{margin:14px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}.field input{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text)}.check{display:flex;align-items:center;gap:8px}.check input{width:18px;height:18px}.date-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+@media(max-width:700px){.app{padding:12px}.cell{min-height:95px;padding:6px}.event{font-size:11px}.head{padding:15px}.week div{font-size:11px}}
+</style>
+</head>
+<body>
+<section id="login" class="login">
+<div class="login-card">
+<div class="logo"></div><h1>OnCallinder</h1>
+<p>Apple 캘린더처럼 깔끔하게<br>내 일정을 한눈에 관리해보세요.</p>
+<button class="apple" onclick="demoLogin()"> Apple로 로그인</button>
+<div class="demo">현재는 실제 Apple 계정과 연결되지 않은 데모 로그인입니다.</div>
+</div>
+</section>
+
+<section id="app" class="app hidden">
+<div class="top"><div class="brand">OnCallinder</div><div class="actions">
+<button class="btn" onclick="toggleTheme()" id="themeBtn"></button>
+<button class="btn" onclick="logout()">로그아웃</button>
+<button class="btn primary" onclick="openModal()">＋ 일정 추가</button>
+</div></div>
+<div class="calendar">
+<div class="head"><h2 id="title"></h2><div class="nav">
+<button class="btn" onclick="moveMonth(-1)">‹</button><button class="btn" onclick="today()">오늘</button><button class="btn" onclick="moveMonth(1)">›</button>
+</div></div>
+<div class="week"><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div></div>
+<div id="grid" class="grid"></div>
+</div>
+</section>
+
+<div id="modalBack" class="modal-back hidden"><div class="modal">
+<h3 id="modalTitle">일정 추가</h3>
+<div class="field"><label>일정 이름</label><input id="eventName" placeholder="예: 태권도 수업"></div>
+<div class="field"><label>날짜</label><div class="date-row"><div><label>시작일</label><input id="eventStartDate" type="date"></div><div><label>종료일</label><input id="eventEndDate" type="date"></div></div></div>
+<div class="field check"><input id="allDay" type="checkbox"><label for="allDay">하루 종일</label></div>
+<div class="field"><label>시간</label><input id="eventTime" type="time"></div>
+<div class="modal-actions"><button class="btn" onclick="closeModal()">취소</button><button id="deleteBtn" class="btn hidden" onclick="deleteEvent()">삭제</button><button class="btn primary" onclick="saveEvent()">저장</button></div>
+</div></div>
+
+<script>
+let cursor=new Date(),editingId=null;
+let events=JSON.parse(localStorage.getItem("oncallinderEvents")||"[]");
+document.documentElement.dataset.theme=localStorage.getItem("oncallinderTheme")||"light";
+function pad(n){return String(n).padStart(2,"0")}
+function key(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function demoLogin(){localStorage.setItem("oncallinderLogin","1");showApp()}
+function logout(){localStorage.removeItem("oncallinderLogin");document.getElementById("app").classList.add("hidden");document.getElementById("login").classList.remove("hidden")}
+function showApp(){document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");render();updateThemeButton()}
+function toggleTheme(){let t=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=t;localStorage.setItem("oncallinderTheme",t);updateThemeButton()}
+function updateThemeButton(){document.getElementById("themeBtn").textContent=document.documentElement.dataset.theme==="dark"?"☀︎ 화이트":"☾ 다크"}
+function today(){cursor=new Date();render()} function moveMonth(n){cursor=new Date(cursor.getFullYear(),cursor.getMonth()+n,1);render()}
+function render(){
+document.getElementById("title").textContent=`${cursor.getFullYear()}년 ${cursor.getMonth()+1}월`;
+const grid=document.getElementById("grid");grid.innerHTML="";
+let first=new Date(cursor.getFullYear(),cursor.getMonth(),1),start=(first.getDay()+6)%7;
+let days=new Date(cursor.getFullYear(),cursor.getMonth()+1,0).getDate(),prev=new Date(cursor.getFullYear(),cursor.getMonth(),0).getDate();
+for(let i=0;i<42;i++){let num=i-start+1,d=new Date(cursor.getFullYear(),cursor.getMonth(),num),inMonth=num>=1&&num<=days;
+if(num<=0)d=new Date(cursor.getFullYear(),cursor.getMonth()-1,prev+num);if(num>days)d=new Date(cursor.getFullYear(),cursor.getMonth()+1,num-days);
+let c=document.createElement("div");c.className="cell";let ds=document.createElement("div");ds.className="date"+(inMonth?"":" other");if(key(d)===key(new Date()))ds.classList.add("today");ds.textContent=d.getDate();c.appendChild(ds);
+events.filter(e=>{const start=e.startDate||e.date; const end=e.endDate||e.date; return start<=key(d)&&key(d)<=end}).forEach(e=>{let el=document.createElement("div");el.className="event";const label=e.allDay?"하루 종일":(e.time||"");el.innerHTML=`<small>${label}</small>${escapeHtml(e.name)}`;el.onclick=x=>{x.stopPropagation();editEvent(e.id)};c.appendChild(el)});
+c.onclick=()=>{if(inMonth)openModal(key(d))};grid.appendChild(c)}
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function openModal(date=null){editingId=null;document.getElementById("modalTitle").textContent="일정 추가";document.getElementById("deleteBtn").classList.add("hidden");document.getElementById("eventName").value="";document.getElementById("eventStartDate").value=date||key(new Date());document.getElementById("eventEndDate").value=date||key(new Date());document.getElementById("allDay").checked=false;document.getElementById("eventTime").value="";document.getElementById("eventTime").disabled=false;document.getElementById("modalBack").classList.remove("hidden")}
+function editEvent(id){let e=events.find(x=>x.id===id);if(!e)return;editingId=id;document.getElementById("modalTitle").textContent="일정 수정";document.getElementById("eventName").value=e.name;document.getElementById("eventStartDate").value=e.startDate||e.date;document.getElementById("eventEndDate").value=e.endDate||e.date;document.getElementById("allDay").checked=!!e.allDay;document.getElementById("eventTime").value=e.time||"";document.getElementById("eventTime").disabled=!!e.allDay;document.getElementById("deleteBtn").classList.remove("hidden");document.getElementById("modalBack").classList.remove("hidden")}
+function updateTimeState(){document.getElementById("eventTime").disabled=document.getElementById("allDay").checked;if(document.getElementById("allDay").checked)document.getElementById("eventTime").value=""}
+document.getElementById("allDay").addEventListener("change",updateTimeState);
+function closeModal(){document.getElementById("modalBack").classList.add("hidden")}
+function saveEvent(){let name=document.getElementById("eventName").value.trim(),startDate=document.getElementById("eventStartDate").value,endDate=document.getElementById("eventEndDate").value,allDay=document.getElementById("allDay").checked,time=document.getElementById("eventTime").value;if(!name||!startDate||!endDate)return alert("일정 이름과 날짜를 입력해주세요.");if(endDate<startDate)return alert("종료일은 시작일보다 빠를 수 없습니다.");if(editingId){let e=events.find(x=>x.id===editingId);Object.assign(e,{name,startDate,endDate,allDay,time:allDay?"":time,date:startDate})}else events.push({id:Date.now(),name,startDate,endDate,allDay,time:allDay?"":time,date:startDate});localStorage.setItem("oncallinderEvents",JSON.stringify(events));closeModal();render()}
+function deleteEvent(){if(!editingId)return;events=events.filter(e=>e.id!==editingId);localStorage.setItem("oncallinderEvents",JSON.stringify(events));closeModal();render()}
+if(localStorage.getItem("oncallinderLogin")==="1")showApp();else updateThemeButton();
+</script>
+</body></html>
