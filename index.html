@@ -5,82 +5,2200 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#101010">
 <title>OnCalender</title>
+
 <style>
-:root{--bg:#f5f5f7;--panel:#fff;--text:#1d1d1f;--muted:#86868b;--line:#e5e5e7;--accent:#0071e3;--event:#e8f1ff}
-[data-theme=dark]{--bg:#101010;--panel:#1c1c1e;--text:#f5f5f7;--muted:#98989f;--line:#38383a;--accent:#0a84ff;--event:#203552}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Noto Sans KR",sans-serif}
-button,input{font:inherit}.hidden{display:none!important}
-.login{min-height:100vh;display:grid;place-items:center;padding:24px}.login-card{width:min(430px,100%);background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:42px 30px;text-align:center;box-shadow:0 20px 60px #00000012}.logo{font-size:44px;margin-bottom:10px}.login h1{margin:0 0 10px;font-size:28px}.login p{color:var(--muted);line-height:1.6}.apple{width:100%;border:0;border-radius:14px;padding:14px 18px;background:#000;color:#fff;cursor:pointer;font-weight:650;margin-top:18px}.demo{font-size:12px;color:var(--muted);margin-top:12px}
-.app{min-height:100vh;padding:24px}.top{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-size:20px;font-weight:700}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:9px 13px;cursor:pointer}.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-.calendar{max-width:1200px;margin:22px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:24px;overflow:hidden}.head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--line)}.head h2{margin:0;font-size:25px}.nav{display:flex;gap:6px}.nav button{width:38px;height:38px}.week,.grid{display:grid;grid-template-columns:repeat(7,1fr)}.week div{padding:12px;text-align:center;color:var(--muted);font-size:13px;border-bottom:1px solid var(--line)}.cell{min-height:120px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:9px;cursor:pointer}.cell:nth-child(7n){border-right:0}.date{width:28px;height:28px;display:grid;place-items:center;border-radius:50%;font-size:13px}.today{background:var(--accent);color:#fff}.other{color:var(--muted);opacity:.5}.event{margin-top:7px;background:var(--event);border-radius:7px;padding:5px 7px;font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;cursor:pointer}.event small{display:block;color:var(--muted);margin-bottom:2px}
-.modal-back{position:fixed;inset:0;background:#0008;display:grid;place-items:center;padding:20px}.modal{width:min(420px,100%);background:var(--panel);border-radius:22px;padding:24px}.modal h3{margin-top:0}.field{margin:14px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}.field input{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text)}.check{display:flex;align-items:center;gap:8px}.check input{width:18px;height:18px}.date-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
-@media(max-width:700px){.app{padding:12px}.cell{min-height:95px;padding:6px}.event{font-size:11px}.head{padding:15px}.week div{font-size:11px}}
+:root{
+  --bg:#f5f5f7;
+  --panel:#fff;
+  --text:#1d1d1f;
+  --muted:#86868b;
+  --line:#e5e5e7;
+  --accent:#0071e3;
+  --event:#e8f1ff
+}
+
+[data-theme=dark]{
+  --bg:#101010;
+  --panel:#1c1c1e;
+  --text:#f5f5f7;
+  --muted:#98989f;
+  --line:#38383a;
+  --accent:#0a84ff;
+  --event:#203552
+}
+
+*{
+  box-sizing:border-box
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Noto Sans KR",sans-serif
+}
+
+button,input{
+  font:inherit
+}
+
+.hidden{
+  display:none!important
+}
+
+
+/* ==================== 로그인 ==================== */
+
+.login{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:24px
+}
+
+.login-card{
+  width:min(430px,100%);
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:42px 30px;
+  text-align:center;
+  box-shadow:0 20px 60px #00000012
+}
+
+.oncalender-logo{
+  display:block;
+  width:190px;
+  max-width:70%;
+  height:auto;
+  margin:0 auto 28px;
+  object-fit:contain
+}
+
+.login h1{
+  margin:0 0 10px;
+  font-size:28px
+}
+
+.login p{
+  color:var(--muted);
+  line-height:1.6
+}
+
+.login-buttons{
+  display:grid;
+  gap:10px;
+  margin-top:20px
+}
+
+.login-provider{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px 18px;
+  cursor:pointer;
+  font-weight:700
+}
+
+.apple{
+  background:#000;
+  color:#fff;
+  border-color:#000
+}
+
+.google{
+  background:#fff;
+  color:#111
+}
+
+.naver{
+  background:#03c75a;
+  color:#fff;
+  border-color:#03c75a
+}
+
+.demo{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:12px
+}
+
+.legal-mini{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:15px;
+  line-height:1.6
+}
+
+.legal-mini a{
+  color:var(--accent)
+}
+
+
+/* ==================== 앱 ==================== */
+
+.app{
+  min-height:100vh;
+  padding:24px
+}
+
+.top{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+
+.brand{
+  font-size:20px;
+  font-weight:700
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap
+}
+
+.btn{
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--text);
+  border-radius:12px;
+  padding:9px 13px;
+  cursor:pointer
+}
+
+.primary{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent)
+}
+
+
+/* ==================== 달력 ==================== */
+
+.calendar{
+  max-width:1200px;
+  margin:22px auto 0;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:24px;
+  overflow:hidden
+}
+
+.head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:20px 22px;
+  border-bottom:1px solid var(--line)
+}
+
+.head h2{
+  margin:0;
+  font-size:25px
+}
+
+.nav{
+  display:flex;
+  gap:6px
+}
+
+.nav button{
+  width:38px;
+  height:38px
+}
+
+.week,
+.grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr)
+}
+
+.week div{
+  padding:12px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  border-bottom:1px solid var(--line)
+}
+
+.cell{
+  min-height:120px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:9px;
+  cursor:pointer
+}
+
+.cell:nth-child(7n){
+  border-right:0
+}
+
+.date{
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  font-size:13px
+}
+
+.today{
+  background:var(--accent);
+  color:#fff
+}
+
+.other{
+  color:var(--muted);
+  opacity:.5
+}
+
+
+/* ==================== 일정 ==================== */
+
+.event{
+  margin-top:7px;
+  background:var(--event);
+  border-radius:7px;
+  padding:5px 7px;
+  font-size:12px;
+  overflow:hidden;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:5px
+}
+
+.event small{
+  display:block;
+  color:var(--muted);
+  margin-bottom:2px
+}
+
+.event[data-color="red"]{
+  border-left:4px solid #e5484d
+}
+
+.event[data-color="blue"]{
+  border-left:4px solid #3b82f6
+}
+
+.event[data-color="green"]{
+  border-left:4px solid #20a464
+}
+
+.event[data-color="yellow"]{
+  border-left:4px solid #e5a900
+}
+
+
+/* 완료 체크 버튼 */
+
+.complete-check{
+  flex:none;
+  width:20px;
+  height:20px;
+  padding:0;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:var(--panel);
+  color:var(--accent);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  font-size:12px;
+  line-height:1
+}
+
+.event-content{
+  min-width:0;
+  flex:1;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis
+}
+
+.event.completed{
+  opacity:.55
+}
+
+.event.completed .event-content{
+  text-decoration:line-through
+}
+
+.event.completed .complete-check{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent)
+}
+
+
+/* ==================== 모달 ==================== */
+
+.modal-back{
+  position:fixed;
+  inset:0;
+  background:#0008;
+  display:grid;
+  place-items:center;
+  padding:20px
+}
+
+.modal{
+  width:min(420px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:var(--panel);
+  border-radius:22px;
+  padding:24px
+}
+
+.modal h3{
+  margin-top:0
+}
+
+.field{
+  margin:14px 0
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:6px
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  padding:11px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--text)
+}
+
+.field textarea{
+  min-height:80px;
+  resize:vertical
+}
+
+.check{
+  display:flex;
+  align-items:center;
+  gap:8px
+}
+
+.check input{
+  width:18px;
+  height:18px
+}
+
+.date-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:20px
+}
+
+
+/* ==================== 설정 / 약관 / 검색 ==================== */
+
+.settings-panel{
+  display:grid;
+  gap:10px
+}
+
+.legal-body{
+  font-size:14px;
+  line-height:1.7;
+  color:var(--muted)
+}
+
+.legal-body h4{
+  color:var(--text);
+  margin:18px 0 5px
+}
+
+.search-result{
+  padding:10px 0;
+  border-bottom:1px solid var(--line)
+}
+
+
+/* ==================== 모바일 ==================== */
+
+@media(max-width:700px){
+
+  .app{
+    padding:12px
+  }
+
+  .cell{
+    min-height:95px;
+    padding:6px
+  }
+
+  .event{
+    font-size:11px
+  }
+
+  .head{
+    padding:15px
+  }
+
+  .week div{
+    font-size:11px
+  }
+
+  .complete-check{
+    width:17px;
+    height:17px;
+    font-size:10px
+  }
+
+}
 </style>
 </head>
+
 <body>
+
+
+<!-- ==================== 로그인 ==================== -->
+
 <section id="login" class="login">
-<div class="login-card">
-<div class="logo">OnCalender</div><h1>OnCalender</h1>
-<p>나의 캘린더로 깔끔하게<br>내 일정을 한눈에 관리해보세요.</p>
-<button class="apple" onclick="demoLogin()"> Apple로 로그인</button>
-<div class="demo">현재는 실제 Apple 계정과 연결되지 않은 데모 로그인입니다.</div>
-</div>
-</section>
-<section id="app" class="app hidden">
-<div class="top"><div class="brand">OnCalender</div><div class="actions">
-<button class="btn" onclick="toggleTheme()" id="themeBtn"></button>
-<button class="btn" onclick="logout()">로그아웃</button>
-<button class="btn primary" onclick="openModal()">＋ 일정 추가</button>
-</div></div>
-<div class="calendar">
-<div class="head"><h2 id="title"></h2><div class="nav">
-<button class="btn" onclick="moveMonth(-1)">‹</button><button class="btn" onclick="today()">오늘</button><button class="btn" onclick="moveMonth(1)">›</button>
-</div></div>
-<div class="week"><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div></div>
-<div id="grid" class="grid"></div>
-</div>
+
+  <div class="login-card">
+
+    <img
+      src="logo.png"
+      class="oncalender-logo"
+      alt="on Calender 로고"
+    >
+
+    <h1>oncalender에 오신 것을 환영해요 :)</h1>
+
+    <p>
+      깔끔하게 내 일정을 한눈에 관리해보세요.
+    </p>
+
+    <div class="login-buttons">
+
+      <button
+        class="login-provider apple"
+        onclick="demoLogin('Apple')"
+      >
+         Apple로 계속하기
+      </button>
+
+      <button
+        class="login-provider google"
+        onclick="demoLogin('Google')"
+      >
+        G&nbsp;&nbsp; Google로 계속하기
+      </button>
+
+      <button
+        class="login-provider naver"
+        onclick="demoLogin('NAVER')"
+      >
+        N&nbsp;&nbsp; NAVER로 계속하기
+      </button>
+
+    </div>
+
+    <div class="demo">
+      현재 로그인은 데모입니다.
+      실제 OAuth 연결 시 버튼은 서버 인증으로 연결하면 됩니다.
+    </div>
+
+    <div class="legal-mini">
+
+      계속하면
+
+      <a
+        href="#"
+        onclick="openLegal('terms');return false"
+      >
+        서비스 이용약관
+      </a>
+
+      및
+
+      <a
+        href="#"
+        onclick="openLegal('privacy');return false"
+      >
+        개인정보 처리방침
+      </a>
+
+      을 확인한 것으로 안내됩니다.
+
+    </div>
+
+  </div>
+
 </section>
 
-<div id="modalBack" class="modal-back hidden"><div class="modal">
-<h3 id="modalTitle">일정 추가</h3>
-<div class="field"><label>일정 이름</label><input id="eventName" placeholder="예: @@ 예약, @@ 대회"></div>
-<div class="field"><label>날짜</label><div class="date-row"><div><label>시작일</label><input id="eventStartDate" type="date"></div><div><label>종료일</label><input id="eventEndDate" type="date"></div></div></div>
-<div class="field check"><input id="allDay" type="checkbox"><label for="allDay">하루 종일</label></div>
-<div class="field"><label>시간</label><input id="eventTime" type="time"></div>
-<div class="modal-actions"><button class="btn" onclick="closeModal()">취소</button><button id="deleteBtn" class="btn hidden" onclick="deleteEvent()">삭제</button><button class="btn primary" onclick="saveEvent()">저장</button></div>
-</div></div>
+
+<!-- ==================== 앱 ==================== -->
+
+<section id="app" class="app hidden">
+
+  <div class="top">
+
+    <div class="brand">
+      OnCalender
+    </div>
+
+    <div class="actions">
+
+      <button
+        class="btn"
+        onclick="openSearch()"
+      >
+        🔎 검색
+      </button>
+
+      <button
+        class="btn"
+        onclick="toggleTheme()"
+        id="themeBtn"
+      ></button>
+
+      <button
+        class="btn"
+        onclick="openSettings()"
+      >
+        ⚙ 설정
+      </button>
+
+      <button
+        class="btn"
+        onclick="logout()"
+      >
+        로그아웃
+      </button>
+
+      <button
+        class="btn primary"
+        onclick="openModal()"
+      >
+        ＋ 일정 추가
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="calendar">
+
+    <div class="head">
+
+      <h2 id="title"></h2>
+
+      <div class="nav">
+
+        <button
+          class="btn"
+          onclick="moveMonth(-1)"
+        >
+          ‹
+        </button>
+
+        <button
+          class="btn"
+          onclick="today()"
+        >
+          오늘
+        </button>
+
+        <button
+          class="btn"
+          onclick="moveMonth(1)"
+        >
+          ›
+        </button>
+
+      </div>
+
+    </div>
+
+    <div
+      id="week"
+      class="week"
+    ></div>
+
+    <div
+      id="grid"
+      class="grid"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- ==================== 일정 추가 / 수정 ==================== -->
+
+<div
+  id="modalBack"
+  class="modal-back hidden"
+>
+
+  <div class="modal">
+
+    <h3 id="modalTitle">
+      일정 추가
+    </h3>
+
+    <div class="field">
+
+      <label>
+        일정 이름
+      </label>
+
+      <input
+        id="eventName"
+        placeholder="예: 태권도 수업"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        날짜
+      </label>
+
+      <div class="date-row">
+
+        <div>
+
+          <label>
+            시작일
+          </label>
+
+          <input
+            id="eventStartDate"
+            type="date"
+          >
+
+        </div>
+
+        <div>
+
+          <label>
+            종료일
+          </label>
+
+          <input
+            id="eventEndDate"
+            type="date"
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="field check">
+
+      <input
+        id="allDay"
+        type="checkbox"
+      >
+
+      <label for="allDay">
+        하루 종일
+      </label>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        시간
+      </label>
+
+      <input
+        id="eventTime"
+        type="time"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        색상
+      </label>
+
+      <select id="eventColor">
+
+        <option value="blue">
+          파랑
+        </option>
+
+        <option value="red">
+          빨강
+        </option>
+
+        <option value="green">
+          초록
+        </option>
+
+        <option value="yellow">
+          노랑
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        메모
+      </label>
+
+      <textarea
+        id="eventMemo"
+        placeholder="일정 메모"
+      ></textarea>
+
+    </div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="btn"
+        onclick="closeModal()"
+      >
+        취소
+      </button>
+
+      <button
+        id="deleteBtn"
+        class="btn hidden"
+        onclick="deleteEvent()"
+      >
+        삭제
+      </button>
+
+      <button
+        class="btn primary"
+        onclick="saveEvent()"
+      >
+        저장
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ==================== 설정 ==================== -->
+
+<div
+  id="settingsBack"
+  class="modal-back hidden"
+>
+
+  <div class="modal">
+
+    <h3>
+      OnCalender 설정
+    </h3>
+
+    <div class="settings-panel">
+
+      <button
+        class="btn"
+        onclick="chooseWeekStart(true)"
+      >
+        📅 월요일부터 시작
+      </button>
+
+      <button
+        class="btn"
+        onclick="chooseWeekStart(false)"
+      >
+        📅 일요일부터 시작
+      </button>
+
+      <button
+        class="btn"
+        onclick="openLegal('terms')"
+      >
+        서비스 이용약관
+      </button>
+
+      <button
+        class="btn"
+        onclick="openLegal('privacy')"
+      >
+        개인정보 처리방침
+      </button>
+
+      <button
+        class="btn"
+        onclick="openLegal('consent')"
+      >
+        개인정보 수집·이용 동의
+      </button>
+
+      <button
+        class="btn"
+        onclick="openLegal('marketing')"
+      >
+        마케팅 정보 수신 동의
+      </button>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn"
+        onclick="closeSettings()"
+      >
+        닫기
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ==================== 약관 ==================== -->
+
+<div
+  id="legalBack"
+  class="modal-back hidden"
+>
+
+  <div class="modal">
+
+    <h3 id="legalTitle"></h3>
+
+    <div
+      id="legalBody"
+      class="legal-body"
+    ></div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn"
+        onclick="closeLegal()"
+      >
+        닫기
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ==================== 검색 ==================== -->
+
+<div
+  id="searchBack"
+  class="modal-back hidden"
+>
+
+  <div class="modal">
+
+    <h3>
+      일정 검색
+    </h3>
+
+    <div class="field">
+
+      <label>
+        검색어
+      </label>
+
+      <input
+        id="searchInput"
+        placeholder="일정 이름 또는 메모"
+      >
+
+    </div>
+
+    <div
+      id="searchResults"
+      class="legal-body"
+    >
+      검색어를 입력해주세요.
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn"
+        onclick="closeSearch()"
+      >
+        닫기
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ==================== 처음 로그인 시 요일 선택 ==================== -->
+
+<div
+  id="weekStartBack"
+  class="modal-back hidden"
+>
+
+  <div class="modal">
+
+    <h3>
+      달력 시작 요일
+    </h3>
+
+    <p
+      style="color:var(--muted);line-height:1.6"
+    >
+      처음 로그인할 때 선택할 수 있고,
+      설정에서도 언제든 바꿀 수 있습니다.
+    </p>
+
+    <div class="settings-panel">
+
+      <button
+        class="btn primary"
+        onclick="finishWeekChoice(true)"
+      >
+        월요일부터 시작
+      </button>
+
+      <button
+        class="btn"
+        onclick="finishWeekChoice(false)"
+      >
+        일요일부터 시작
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
 
 <script>
-let cursor=new Date(),editingId=null;
-let events=JSON.parse(localStorage.getItem("oncalenderEvents")||"[]");
-document.documentElement.dataset.theme=localStorage.getItem("oncallinderTheme")||"light";
-function pad(n){return String(n).padStart(2,"0")}
-function key(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
-function demoLogin(){localStorage.setItem("oncalenderLogin","1");showApp()}
-function logout(){localStorage.removeItem("oncalenderLogin");document.getElementById("app").classList.add("hidden");document.getElementById("login").classList.remove("hidden")}
-function showApp(){document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");render();updateThemeButton()}
-function toggleTheme(){let t=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=t;localStorage.setItem("oncallinderTheme",t);updateThemeButton()}
-function updateThemeButton(){document.getElementById("themeBtn").textContent=document.documentElement.dataset.theme==="dark"?"☀︎ 화이트":"☾ 다크"}
-function today(){cursor=new Date();render()} function moveMonth(n){cursor=new Date(cursor.getFullYear(),cursor.getMonth()+n,1);render()}
-function render(){
-document.getElementById("title").textContent=`${cursor.getFullYear()}년 ${cursor.getMonth()+1}월`;
-const grid=document.getElementById("grid");grid.innerHTML="";
-let first=new Date(cursor.getFullYear(),cursor.getMonth(),1),start=(first.getDay()+6)%7;
-let days=new Date(cursor.getFullYear(),cursor.getMonth()+1,0).getDate(),prev=new Date(cursor.getFullYear(),cursor.getMonth(),0).getDate();
-for(let i=0;i<42;i++){let num=i-start+1,d=new Date(cursor.getFullYear(),cursor.getMonth(),num),inMonth=num>=1&&num<=days;
-if(num<=0)d=new Date(cursor.getFullYear(),cursor.getMonth()-1,prev+num);if(num>days)d=new Date(cursor.getFullYear(),cursor.getMonth()+1,num-days);
-let c=document.createElement("div");c.className="cell";let ds=document.createElement("div");ds.className="date"+(inMonth?"":" other");if(key(d)===key(new Date()))ds.classList.add("today");ds.textContent=d.getDate();c.appendChild(ds);
-events.filter(e=>{const start=e.startDate||e.date; const end=e.endDate||e.date; return start<=key(d)&&key(d)<=end}).forEach(e=>{let el=document.createElement("div");el.className="event";const label=e.allDay?"하루 종일":(e.time||"");el.innerHTML=`<small>${label}</small>${escapeHtml(e.name)}`;el.onclick=x=>{x.stopPropagation();editEvent(e.id)};c.appendChild(el)});
-c.onclick=()=>{if(inMonth)openModal(key(d))};grid.appendChild(c)}
+
+/* ==================== 기본 변수 ==================== */
+
+let cursor = new Date();
+
+let editingId = null;
+
+let events =
+  JSON.parse(
+    localStorage.getItem("oncalenderEvents") || "[]"
+  );
+
+let login =
+  JSON.parse(
+    localStorage.getItem("oncalenderLogin") || "null"
+  );
+
+let weekStart =
+  localStorage.getItem("oncalenderWeekStart");
+
+
+document.documentElement.dataset.theme =
+  localStorage.getItem("oncalenderTheme") || "light";
+
+
+/* ==================== 약관 ==================== */
+
+const legalPages = {
+
+  terms:{
+    title:"서비스 이용약관",
+
+    body:`
+
+      <h4>제1조 목적</h4>
+
+      <p>
+      이 약관은 OnCalender의 이용 조건과 절차,
+      이용자와 서비스 운영자의 권리와 의무를 정하는 것을 목적으로 합니다.
+      </p>
+
+      <h4>제2조 서비스</h4>
+
+      <p>
+      OnCalender는 일정 생성, 조회, 수정, 삭제 및
+      캘린더 관리 기능을 제공합니다.
+      제공 기능은 서비스 운영 상황에 따라 변경될 수 있습니다.
+      </p>
+
+      <h4>제3조 회원가입</h4>
+
+      <p>
+      이용자는 정확한 정보를 제공해야 하며
+      타인의 정보를 무단으로 사용해서는 안 됩니다.
+      Google, Apple, NAVER 등 외부 계정을 이용한
+      로그인 기능이 제공될 수 있습니다.
+      </p>
+
+      <h4>제4조 이용자의 의무</h4>
+
+      <p>
+      이용자는 관계 법령과 본 약관을 준수해야 하며
+      서비스 운영을 방해하는 행위를 해서는 안 됩니다.
+      </p>
+
+    `
+  },
+
+
+  privacy:{
+    title:"개인정보 처리방침",
+
+    body:`
+
+      <h4>1. 처리하는 개인정보</h4>
+
+      <p>
+      회원가입 및 로그인 과정에서 이름,
+      이메일 주소, 외부 로그인 제공자의 이용자 식별정보 등이
+      처리될 수 있습니다.
+      일정 기능을 이용하면 일정 제목, 날짜, 시간,
+      메모, 색상 등 이용자가 입력한 정보가 처리될 수 있습니다.
+      </p>
+
+      <h4>2. 이용 목적</h4>
+
+      <p>
+      회원 식별, 로그인, 일정 저장 및 동기화,
+      서비스 제공, 문의 대응, 오류 및 보안 관리 등을 위해 이용합니다.
+      </p>
+
+      <h4>3. 보관 및 삭제</h4>
+
+      <p>
+      회원 탈퇴 등 개인정보가 더 이상 필요하지 않게 되면
+      삭제하는 것을 원칙으로 합니다.
+      법령상 보존 의무가 있는 경우 해당 기간 동안 보관할 수 있습니다.
+      </p>
+
+      <h4>4. 외부 로그인</h4>
+
+      <p>
+      Google, Apple, NAVER 등 외부 로그인 서비스를 사용할 경우
+      각 제공자의 인증 절차가 적용될 수 있습니다.
+      </p>
+
+      <p>
+      <b>개발용 초안:</b>
+      실제 공개 전에는 실제 수집 항목, 보관 기간,
+      서버·DB·외부 서비스 및 운영자 정보를 기준으로 수정해야 합니다.
+      </p>
+
+    `
+  },
+
+
+  consent:{
+    title:"개인정보 수집·이용 동의",
+
+    body:`
+
+      <p>
+      OnCalender는 회원가입과 서비스 제공을 위해
+      필요한 범위에서 개인정보를 수집·이용할 수 있습니다.
+      </p>
+
+      <ul>
+
+        <li>
+          수집 항목:
+          이름, 이메일, 외부 로그인 이용자 식별정보 및
+          서비스 이용 과정에서 생성되는 정보
+        </li>
+
+        <li>
+          이용 목적:
+          회원 식별, 로그인, 일정 저장 및 동기화, 서비스 제공
+        </li>
+
+        <li>
+          보유 기간:
+          회원 탈퇴 등 개인정보가 더 이상 필요하지 않게 되는 시점까지
+          (법령상 보존 의무가 있는 경우 해당 기간까지)
+        </li>
+
+      </ul>
+
+    `
+  },
+
+
+  marketing:{
+    title:"마케팅 정보 수신 동의",
+
+    body:`
+
+      <p>
+      이용자가 동의한 경우 OnCalender의 서비스 업데이트,
+      이벤트 및 혜택 등의 정보를 이메일 또는 앱 내 알림 등으로
+      안내할 수 있습니다.
+      </p>
+
+      <p>
+      이 동의는 선택 사항이며 동의하지 않아도
+      기본 서비스를 이용할 수 있습니다.
+      </p>
+
+    `
+  }
+
+};
+
+
+/* ==================== 날짜 ==================== */
+
+function pad(n){
+
+  return String(n).padStart(2,"0");
+
 }
-function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function openModal(date=null){editingId=null;document.getElementById("modalTitle").textContent="일정 추가";document.getElementById("deleteBtn").classList.add("hidden");document.getElementById("eventName").value="";document.getElementById("eventStartDate").value=date||key(new Date());document.getElementById("eventEndDate").value=date||key(new Date());document.getElementById("allDay").checked=false;document.getElementById("eventTime").value="";document.getElementById("eventTime").disabled=false;document.getElementById("modalBack").classList.remove("hidden")}
-function editEvent(id){let e=events.find(x=>x.id===id);if(!e)return;editingId=id;document.getElementById("modalTitle").textContent="일정 수정";document.getElementById("eventName").value=e.name;document.getElementById("eventStartDate").value=e.startDate||e.date;document.getElementById("eventEndDate").value=e.endDate||e.date;document.getElementById("allDay").checked=!!e.allDay;document.getElementById("eventTime").value=e.time||"";document.getElementById("eventTime").disabled=!!e.allDay;document.getElementById("deleteBtn").classList.remove("hidden");document.getElementById("modalBack").classList.remove("hidden")}
-function updateTimeState(){document.getElementById("eventTime").disabled=document.getElementById("allDay").checked;if(document.getElementById("allDay").checked)document.getElementById("eventTime").value=""}
-document.getElementById("allDay").addEventListener("change",updateTimeState);
-function closeModal(){document.getElementById("modalBack").classList.add("hidden")}
-function saveEvent(){let name=document.getElementById("eventName").value.trim(),startDate=document.getElementById("eventStartDate").value,endDate=document.getElementById("eventEndDate").value,allDay=document.getElementById("allDay").checked,time=document.getElementById("eventTime").value;if(!name||!startDate||!endDate)return alert("일정 이름과 날짜를 입력해주세요.");if(endDate<startDate)return alert("종료일은 시작일보다 빠를 수 없습니다.");if(editingId){let e=events.find(x=>x.id===editingId);Object.assign(e,{name,startDate,endDate,allDay,time:allDay?"":time,date:startDate})}else events.push({id:Date.now(),name,startDate,endDate,allDay,time:allDay?"":time,date:startDate});localStorage.setItem("oncallinderEvents",JSON.stringify(events));closeModal();render()}
-function deleteEvent(){if(!editingId)return;events=events.filter(e=>e.id!==editingId);localStorage.setItem("oncalenderEvents",JSON.stringify(events));closeModal();render()}
-if(localStorage.getItem("oncalenderLogin")==="1")showApp();else updateThemeButton();
+
+
+function key(d){
+
+  return d.getFullYear()
+    + "-"
+    + pad(d.getMonth()+1)
+    + "-"
+    + pad(d.getDate());
+
+}
+
+
+/* ==================== 로그인 ==================== */
+
+function demoLogin(provider){
+
+  login = {
+    provider:provider,
+    name:"OnCalender 사용자"
+  };
+
+  localStorage.setItem(
+    "oncalenderLogin",
+    JSON.stringify(login)
+  );
+
+  showApp();
+
+  if(!weekStart){
+
+    document
+      .getElementById("weekStartBack")
+      .classList.remove("hidden");
+
+  }else{
+
+    render();
+
+  }
+
+}
+
+
+function finishWeekChoice(monday){
+
+  weekStart =
+    monday
+      ? "monday"
+      : "sunday";
+
+  localStorage.setItem(
+    "oncalenderWeekStart",
+    weekStart
+  );
+
+  document
+    .getElementById("weekStartBack")
+    .classList.add("hidden");
+
+  render();
+
+}
+
+
+function chooseWeekStart(monday){
+
+  finishWeekChoice(monday);
+
+  closeSettings();
+
+}
+
+
+function logout(){
+
+  localStorage.removeItem(
+    "oncalenderLogin"
+  );
+
+  login = null;
+
+  document
+    .getElementById("app")
+    .classList.add("hidden");
+
+  document
+    .getElementById("login")
+    .classList.remove("hidden");
+
+}
+
+
+function showApp(){
+
+  document
+    .getElementById("login")
+    .classList.add("hidden");
+
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
+
+  updateThemeButton();
+
+  render();
+
+}
+
+
+/* ==================== 테마 ==================== */
+
+function toggleTheme(){
+
+  let t =
+    document.documentElement.dataset.theme === "dark"
+      ? "light"
+      : "dark";
+
+  document.documentElement.dataset.theme = t;
+
+  localStorage.setItem(
+    "oncalenderTheme",
+    t
+  );
+
+  updateThemeButton();
+
+}
+
+
+function updateThemeButton(){
+
+  document.getElementById(
+    "themeBtn"
+  ).textContent =
+    document.documentElement.dataset.theme === "dark"
+      ? "☀︎ 화이트"
+      : "☾ 다크";
+
+}
+
+
+/* ==================== 달력 ==================== */
+
+function today(){
+
+  cursor = new Date();
+
+  render();
+
+}
+
+
+function moveMonth(n){
+
+  cursor =
+    new Date(
+      cursor.getFullYear(),
+      cursor.getMonth()+n,
+      1
+    );
+
+  render();
+
+}
+
+
+function render(){
+
+  document.getElementById(
+    "title"
+  ).textContent =
+    `${cursor.getFullYear()}년 ${cursor.getMonth()+1}월`;
+
+
+  const labels =
+    weekStart === "sunday"
+
+      ? ["일","월","화","수","목","금","토"]
+
+      : ["월","화","수","목","금","토","일"];
+
+
+  document.getElementById(
+    "week"
+  ).innerHTML =
+    labels
+      .map(x=>`<div>${x}</div>`)
+      .join("");
+
+
+  const grid =
+    document.getElementById("grid");
+
+  grid.innerHTML = "";
+
+
+  let first =
+    new Date(
+      cursor.getFullYear(),
+      cursor.getMonth(),
+      1
+    );
+
+
+  let jsDay =
+    first.getDay();
+
+
+  let start =
+    weekStart === "sunday"
+      ? jsDay
+      : (jsDay+6)%7;
+
+
+  let days =
+    new Date(
+      cursor.getFullYear(),
+      cursor.getMonth()+1,
+      0
+    ).getDate();
+
+
+  let prev =
+    new Date(
+      cursor.getFullYear(),
+      cursor.getMonth(),
+      0
+    ).getDate();
+
+
+  for(let i=0;i<42;i++){
+
+    let num =
+      i-start+1;
+
+
+    let d =
+      new Date(
+        cursor.getFullYear(),
+        cursor.getMonth(),
+        num
+      );
+
+
+    let inMonth =
+      num>=1 && num<=days;
+
+
+    if(num<=0){
+
+      d =
+        new Date(
+          cursor.getFullYear(),
+          cursor.getMonth()-1,
+          prev+num
+        );
+
+    }
+
+
+    if(num>days){
+
+      d =
+        new Date(
+          cursor.getFullYear(),
+          cursor.getMonth()+1,
+          num-days
+        );
+
+    }
+
+
+    let c =
+      document.createElement("div");
+
+    c.className = "cell";
+
+
+    let ds =
+      document.createElement("div");
+
+    ds.className =
+      "date"
+      + (inMonth ? "" : " other");
+
+
+    if(
+      key(d) ===
+      key(new Date())
+    ){
+
+      ds.classList.add("today");
+
+    }
+
+
+    ds.textContent =
+      d.getDate();
+
+
+    c.appendChild(ds);
+
+
+    events
+      .filter(
+        e =>
+          (e.startDate || e.date)
+            <= key(d)
+          &&
+          key(d)
+            <= (e.endDate || e.date)
+      )
+      .forEach(e=>{
+
+        let el =
+          document.createElement("div");
+
+        el.className =
+          "event"
+          + (e.completed ? " completed" : "");
+
+        el.dataset.color =
+          e.color || "blue";
+
+
+        const label =
+          e.allDay
+            ? "하루 종일"
+            : (e.time || "");
+
+
+        el.innerHTML = `
+
+          <button
+            class="complete-check"
+            onclick="toggleComplete(event, ${e.id})"
+            aria-label="일정 완료"
+          >
+            ${e.completed ? "✓" : ""}
+          </button>
+
+          <div class="event-content">
+
+            <small>
+              ${label}
+            </small>
+
+            ${escapeHtml(e.name)}
+
+          </div>
+
+        `;
+
+
+        el.onclick =
+          x => {
+
+            x.stopPropagation();
+
+            editEvent(e.id);
+
+          };
+
+
+        c.appendChild(el);
+
+      });
+
+
+    c.onclick =
+      () => {
+
+        if(inMonth)
+          openModal(key(d));
+
+      };
+
+
+    grid.appendChild(c);
+
+  }
+
+}
+
+
+/* ==================== HTML 보안 처리 ==================== */
+
+function escapeHtml(s){
+
+  return String(s).replace(
+    /[&<>"']/g,
+    m =>
+      ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[m])
+  );
+
+}
+
+
+/* ==================== 일정 완료 체크 ==================== */
+
+function toggleComplete(event,id){
+
+  event.stopPropagation();
+
+
+  let e =
+    events.find(
+      x => x.id === id
+    );
+
+
+  if(!e)return;
+
+
+  e.completed =
+    !e.completed;
+
+
+  localStorage.setItem(
+    "oncalenderEvents",
+    JSON.stringify(events)
+  );
+
+
+  render();
+
+}
+
+
+/* ==================== 일정 추가 ==================== */
+
+function openModal(date=null){
+
+  editingId = null;
+
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent =
+    "일정 추가";
+
+
+  document.getElementById(
+    "deleteBtn"
+  ).classList.add("hidden");
+
+
+  document.getElementById(
+    "eventName"
+  ).value = "";
+
+
+  document.getElementById(
+    "eventStartDate"
+  ).value =
+    date || key(new Date());
+
+
+  document.getElementById(
+    "eventEndDate"
+  ).value =
+    date || key(new Date());
+
+
+  document.getElementById(
+    "allDay"
+  ).checked = false;
+
+
+  document.getElementById(
+    "eventTime"
+  ).value = "";
+
+
+  document.getElementById(
+    "eventTime"
+  ).disabled = false;
+
+
+  document.getElementById(
+    "eventColor"
+  ).value = "blue";
+
+
+  document.getElementById(
+    "eventMemo"
+  ).value = "";
+
+
+  document
+    .getElementById("modalBack")
+    .classList.remove("hidden");
+
+}
+
+
+/* ==================== 일정 수정 ==================== */
+
+function editEvent(id){
+
+  let e =
+    events.find(
+      x => x.id === id
+    );
+
+
+  if(!e)return;
+
+
+  editingId = id;
+
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent =
+    "일정 수정";
+
+
+  document.getElementById(
+    "eventName"
+  ).value =
+    e.name;
+
+
+  document.getElementById(
+    "eventStartDate"
+  ).value =
+    e.startDate || e.date;
+
+
+  document.getElementById(
+    "eventEndDate"
+  ).value =
+    e.endDate || e.date;
+
+
+  document.getElementById(
+    "allDay"
+  ).checked =
+    !!e.allDay;
+
+
+  document.getElementById(
+    "eventTime"
+  ).value =
+    e.time || "";
+
+
+  document.getElementById(
+    "eventTime"
+  ).disabled =
+    !!e.allDay;
+
+
+  document.getElementById(
+    "eventColor"
+  ).value =
+    e.color || "blue";
+
+
+  document.getElementById(
+    "eventMemo"
+  ).value =
+    e.memo || "";
+
+
+  document.getElementById(
+    "deleteBtn"
+  ).classList.remove("hidden");
+
+
+  document
+    .getElementById("modalBack")
+    .classList.remove("hidden");
+
+}
+
+
+/* ==================== 하루 종일 ==================== */
+
+function updateTimeState(){
+
+  document.getElementById(
+    "eventTime"
+  ).disabled =
+    document.getElementById(
+      "allDay"
+    ).checked;
+
+
+  if(
+    document.getElementById(
+      "allDay"
+    ).checked
+  ){
+
+    document.getElementById(
+      "eventTime"
+    ).value = "";
+
+  }
+
+}
+
+
+document
+  .getElementById("allDay")
+  .addEventListener(
+    "change",
+    updateTimeState
+  );
+
+
+/* ==================== 모달 닫기 ==================== */
+
+function closeModal(){
+
+  document
+    .getElementById("modalBack")
+    .classList.add("hidden");
+
+}
+
+
+/* ==================== 일정 저장 ==================== */
+
+function saveEvent(){
+
+  let name =
+    document
+      .getElementById("eventName")
+      .value
+      .trim();
+
+
+  let startDate =
+    document
+      .getElementById("eventStartDate")
+      .value;
+
+
+  let endDate =
+    document
+      .getElementById("eventEndDate")
+      .value;
+
+
+  let allDay =
+    document
+      .getElementById("allDay")
+      .checked;
+
+
+  let time =
+    document
+      .getElementById("eventTime")
+      .value;
+
+
+  let color =
+    document
+      .getElementById("eventColor")
+      .value;
+
+
+  let memo =
+    document
+      .getElementById("eventMemo")
+      .value
+      .trim();
+
+
+  if(
+    !name ||
+    !startDate ||
+    !endDate
+  ){
+
+    return alert(
+      "일정 이름과 날짜를 입력해주세요."
+    );
+
+  }
+
+
+  if(endDate < startDate){
+
+    return alert(
+      "종료일은 시작일보다 빠를 수 없습니다."
+    );
+
+  }
+
+
+  let data = {
+
+    name,
+
+    startDate,
+
+    endDate,
+
+    allDay,
+
+    time:
+      allDay
+        ? ""
+        : time,
+
+    color,
+
+    memo,
+
+    date:startDate
+
+  };
+
+
+  if(editingId){
+
+    let e =
+      events.find(
+        x => x.id === editingId
+      );
+
+
+    /*
+      기존에 완료한 일정이라면
+      수정해도 완료 상태를 유지
+    */
+
+    Object.assign(
+      e,
+      data
+    );
+
+  }else{
+
+    events.push({
+
+      id:Date.now(),
+
+      ...data,
+
+      completed:false
+
+    });
+
+  }
+
+
+  localStorage.setItem(
+    "oncalenderEvents",
+    JSON.stringify(events)
+  );
+
+
+  closeModal();
+
+  render();
+
+}
+
+
+/* ==================== 일정 삭제 ==================== */
+
+function deleteEvent(){
+
+  if(!editingId)return;
+
+
+  events =
+    events.filter(
+      e =>
+        e.id !== editingId
+    );
+
+
+  localStorage.setItem(
+    "oncalenderEvents",
+    JSON.stringify(events)
+  );
+
+
+  closeModal();
+
+  render();
+
+}
+
+
+/* ==================== 설정 ==================== */
+
+function openSettings(){
+
+  document
+    .getElementById("settingsBack")
+    .classList.remove("hidden");
+
+}
+
+
+function closeSettings(){
+
+  document
+    .getElementById("settingsBack")
+    .classList.add("hidden");
+
+}
+
+
+/* ==================== 약관 ==================== */
+
+function openLegal(type){
+
+  let p =
+    legalPages[type];
+
+
+  document.getElementById(
+    "legalTitle"
+  ).textContent =
+    p.title;
+
+
+  document.getElementById(
+    "legalBody"
+  ).innerHTML =
+    p.body;
+
+
+  document
+    .getElementById("legalBack")
+    .classList.remove("hidden");
+
+}
+
+
+function closeLegal(){
+
+  document
+    .getElementById("legalBack")
+    .classList.add("hidden");
+
+}
+
+
+/* ==================== 검색 ==================== */
+
+function openSearch(){
+
+  document.getElementById(
+    "searchInput"
+  ).value = "";
+
+
+  document.getElementById(
+    "searchResults"
+  ).innerHTML =
+    "검색어를 입력해주세요.";
+
+
+  document
+    .getElementById("searchBack")
+    .classList.remove("hidden");
+
+
+  document
+    .getElementById("searchInput")
+    .focus();
+
+}
+
+
+function closeSearch(){
+
+  document
+    .getElementById("searchBack")
+    .classList.add("hidden");
+
+}
+
+
+document
+  .getElementById("searchInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      let q =
+        this.value
+          .trim()
+          .toLowerCase();
+
+
+      if(!q){
+
+        document.getElementById(
+          "searchResults"
+        ).innerHTML =
+          "검색어를 입력해주세요.";
+
+        return;
+
+      }
+
+
+      let found =
+        events.filter(
+          e =>
+            (
+              e.name
+              + " "
+              + (e.memo || "")
+            )
+              .toLowerCase()
+              .includes(q)
+        );
+
+
+      document.getElementById(
+        "searchResults"
+      ).innerHTML =
+
+        found.length
+
+          ?
+
+            found
+              .map(
+                e => `
+
+                  <div class="search-result">
+
+                    <b>
+                      ${escapeHtml(e.name)}
+                    </b>
+
+                    <br>
+
+                    ${e.startDate}
+                    ~
+                    ${e.endDate}
+
+                    ${
+                      e.allDay
+                        ? " · 하루 종일"
+                        : e.time
+                          ? " · " + e.time
+                          : ""
+                    }
+
+                    ${
+                      e.completed
+                        ? " · ☑ 완료"
+                        : " · ☐ 미완료"
+                    }
+
+                    ${
+                      e.memo
+                        ? "<br>" +
+                          escapeHtml(e.memo)
+                        : ""
+                    }
+
+                  </div>
+
+                `
+              )
+              .join("")
+
+          :
+
+            "검색 결과가 없습니다.";
+
+    }
+  );
+
+
+/* ==================== 시작 ==================== */
+
+if(login){
+
+  showApp();
+
+}else{
+
+  updateThemeButton();
+
+}
+
 </script>
-</body></html>
+
+</body>
+</html>
