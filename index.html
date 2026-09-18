@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#101010">
-<title>OnCallinder</title>
+<title>OnCalender</title>
 <style>
 :root{--bg:#f5f5f7;--panel:#fff;--text:#1d1d1f;--muted:#86868b;--line:#e5e5e7;--accent:#0071e3;--event:#e8f1ff}
 [data-theme=dark]{--bg:#101010;--panel:#1c1c1e;--text:#f5f5f7;--muted:#98989f;--line:#38383a;--accent:#0a84ff;--event:#203552}
@@ -20,13 +20,12 @@ button,input{font:inherit}.hidden{display:none!important}
 <body>
 <section id="login" class="login">
 <div class="login-card">
-<div class="logo"></div><h1>OnCalender</h1>
-<p>Apple 캘린더처럼 깔끔하게<br>내 일정을 한눈에 관리해보세요.</p>
+<div class="logo">OnCalender</div><h1>OnCalender</h1>
+<p>나의 캘린더로 깔끔하게<br>내 일정을 한눈에 관리해보세요.</p>
 <button class="apple" onclick="demoLogin()"> Apple로 로그인</button>
 <div class="demo">현재는 실제 Apple 계정과 연결되지 않은 데모 로그인입니다.</div>
 </div>
 </section>
-
 <section id="app" class="app hidden">
 <div class="top"><div class="brand">OnCalender</div><div class="actions">
 <button class="btn" onclick="toggleTheme()" id="themeBtn"></button>
@@ -44,7 +43,7 @@ button,input{font:inherit}.hidden{display:none!important}
 
 <div id="modalBack" class="modal-back hidden"><div class="modal">
 <h3 id="modalTitle">일정 추가</h3>
-<div class="field"><label>일정 이름</label><input id="eventName" placeholder="예: 태권도 수업"></div>
+<div class="field"><label>일정 이름</label><input id="eventName" placeholder="예: @@ 예약, @@ 대회"></div>
 <div class="field"><label>날짜</label><div class="date-row"><div><label>시작일</label><input id="eventStartDate" type="date"></div><div><label>종료일</label><input id="eventEndDate" type="date"></div></div></div>
 <div class="field check"><input id="allDay" type="checkbox"><label for="allDay">하루 종일</label></div>
 <div class="field"><label>시간</label><input id="eventTime" type="time"></div>
@@ -53,12 +52,12 @@ button,input{font:inherit}.hidden{display:none!important}
 
 <script>
 let cursor=new Date(),editingId=null;
-let events=JSON.parse(localStorage.getItem("oncallinderEvents")||"[]");
+let events=JSON.parse(localStorage.getItem("oncalenderEvents")||"[]");
 document.documentElement.dataset.theme=localStorage.getItem("oncallinderTheme")||"light";
 function pad(n){return String(n).padStart(2,"0")}
 function key(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
-function demoLogin(){localStorage.setItem("oncallinderLogin","1");showApp()}
-function logout(){localStorage.removeItem("oncallinderLogin");document.getElementById("app").classList.add("hidden");document.getElementById("login").classList.remove("hidden")}
+function demoLogin(){localStorage.setItem("oncalenderLogin","1");showApp()}
+function logout(){localStorage.removeItem("oncalenderLogin");document.getElementById("app").classList.add("hidden");document.getElementById("login").classList.remove("hidden")}
 function showApp(){document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");render();updateThemeButton()}
 function toggleTheme(){let t=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=t;localStorage.setItem("oncallinderTheme",t);updateThemeButton()}
 function updateThemeButton(){document.getElementById("themeBtn").textContent=document.documentElement.dataset.theme==="dark"?"☀︎ 화이트":"☾ 다크"}
@@ -81,7 +80,7 @@ function updateTimeState(){document.getElementById("eventTime").disabled=documen
 document.getElementById("allDay").addEventListener("change",updateTimeState);
 function closeModal(){document.getElementById("modalBack").classList.add("hidden")}
 function saveEvent(){let name=document.getElementById("eventName").value.trim(),startDate=document.getElementById("eventStartDate").value,endDate=document.getElementById("eventEndDate").value,allDay=document.getElementById("allDay").checked,time=document.getElementById("eventTime").value;if(!name||!startDate||!endDate)return alert("일정 이름과 날짜를 입력해주세요.");if(endDate<startDate)return alert("종료일은 시작일보다 빠를 수 없습니다.");if(editingId){let e=events.find(x=>x.id===editingId);Object.assign(e,{name,startDate,endDate,allDay,time:allDay?"":time,date:startDate})}else events.push({id:Date.now(),name,startDate,endDate,allDay,time:allDay?"":time,date:startDate});localStorage.setItem("oncallinderEvents",JSON.stringify(events));closeModal();render()}
-function deleteEvent(){if(!editingId)return;events=events.filter(e=>e.id!==editingId);localStorage.setItem("oncallinderEvents",JSON.stringify(events));closeModal();render()}
-if(localStorage.getItem("oncallinderLogin")==="1")showApp();else updateThemeButton();
+function deleteEvent(){if(!editingId)return;events=events.filter(e=>e.id!==editingId);localStorage.setItem("oncalenderEvents",JSON.stringify(events));closeModal();render()}
+if(localStorage.getItem("oncalenderLogin")==="1")showApp();else updateThemeButton();
 </script>
 </body></html>
